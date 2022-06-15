@@ -100,6 +100,7 @@ final class MovieViewController: UIViewController, UniqueIdHelper, Alertable, Fa
     
     var media: MediaData!
     
+    let gradientLayer = CAGradientLayer()
     static var uniqueID: String = "MovieViewController"
     
     var recommendedMovies: DataSection<MediaData> = DataSection(
@@ -156,6 +157,11 @@ final class MovieViewController: UIViewController, UniqueIdHelper, Alertable, Fa
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.loadFullDetails()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = self.movieImageView.bounds
     }
     
     override func viewDidLoad() {
@@ -254,7 +260,7 @@ final class MovieViewController: UIViewController, UniqueIdHelper, Alertable, Fa
         self.movieTitleLbl.text = media.title
         self.movieDesLbl.text = media.date
         self.progressView.value = CGFloat(10 * media.voteAverage)
-        self.aboutLbl.text = media.overview 
+        self.aboutLbl.text = media.overview
     }
     
     private func calculateHeight () {
@@ -317,8 +323,6 @@ extension MovieViewController {
     }
     
     private func setUpMovieBackground () {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.movieImageView.bounds
         gradientLayer.colors = [UIColor.black.cgColor, UIColor.clear.cgColor, UIColor.black.cgColor, UIColor.black.cgColor]
         self.movieImageView.layer.addSublayer(gradientLayer)
         self.movieImageView.clipsToBounds = true
@@ -327,6 +331,7 @@ extension MovieViewController {
         self.movieImageView.addSubview(movieImageVisualEffectView)
         self.movieImageVisualEffectView.frame = self.movieImageView.frame
         self.movieImageVisualEffectView.alpha = 0
+        gradientLayer.frame = self.movieImageView.bounds
     }
     
     private func showEmptyView (for sectionView: SectionView) {
